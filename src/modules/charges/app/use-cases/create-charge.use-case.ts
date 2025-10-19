@@ -20,7 +20,7 @@ export class CreateChargeUseCase {
       input.description,
     );
 
-    charge.genereatePixKey(charge);
+    charge.genereatePixKey();
     charge.createdAt = new Date();
     const createdCharge = await this.chargeDAO.create(charge);
     return ChargeMapper.toOutputDTO(createdCharge);

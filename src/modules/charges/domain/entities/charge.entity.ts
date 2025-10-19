@@ -118,7 +118,7 @@ export class Charge {
     );
   }
 
-  genereatePixKey(input: Charge) {
-    input.pixKey = randomUUID();
+  genereatePixKey() {
+    this.pixKey = randomUUID();
   }
 }

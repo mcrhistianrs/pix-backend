@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RedisService } from 'src/modules/redis/app/services/redis.service';
+import { RedisService } from '../../../redis/app/services/redis.service';
 import { IChargeDAO } from '../../domain/interfaces/charge.dao.interface';
 import { ChargeOutputDTO } from '../dto/charge-output.dto';
 import { ErrorChargeOutputDTO } from '../dto/error-charge-output.dto';

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RabbitmqService } from 'src/modules/rabbitmq/app/services/rabbitmq.service';
+import { RabbitmqService } from '../../../rabbitmq/app/services/rabbitmq.service';
 import { IChargeDAO } from '../../domain/interfaces/charge.dao.interface';
 import { CreateSimulationPaymentDto } from '../dto/create-simulation-payment.dto';
 import { ErrorChargeOutputDTO } from '../dto/error-charge-output.dto';
