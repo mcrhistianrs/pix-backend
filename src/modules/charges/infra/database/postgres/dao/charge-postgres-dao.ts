@@ -21,4 +21,14 @@ export class ChargePostgresDAO implements IChargeDAO {
       await this.instanceTypeOrmOfCharge.save(chargeDatabaseEntity);
     return ChargeMapper.toDomain(charge);
   }
+
+  async findById(id: string): Promise<Charge | null> {
+    const charge = await this.instanceTypeOrmOfCharge.findOne({
+      where: { id },
+    });
+    if (!charge) {
+      return null;
+    }
+    return ChargeMapper.toDomain(charge);
+  }
 }
