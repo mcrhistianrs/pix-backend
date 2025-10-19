@@ -1,8 +1,9 @@
 import { CacheModule } from '@nestjs/cache-manager';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChargesModule } from './modules/charges/charges.module';
 import { MongodbModule } from './modules/mongodb/mongodb.module';
 import { RedisModule } from './modules/redis/redis.module';
 
@@ -53,6 +54,7 @@ import { RedisModule } from './modules/redis/redis.module';
     }),
     RedisModule,
     MongodbModule,
+    forwardRef(() => ChargesModule),
   ],
   controllers: [],
   providers: [],
