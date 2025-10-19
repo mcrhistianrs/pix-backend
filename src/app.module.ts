@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChargesModule } from './modules/charges/charges.module';
 import { MongodbModule } from './modules/mongodb/mongodb.module';
+import { RabbitmqModule } from './modules/rabbitmq/rabbitmq.module';
 import { RedisModule } from './modules/redis/redis.module';
 
 @Module({
@@ -52,8 +53,9 @@ import { RedisModule } from './modules/redis/redis.module';
       }),
       inject: [ConfigService],
     }),
-    RedisModule,
-    MongodbModule,
+    forwardRef(() => RedisModule),
+    forwardRef(() => RabbitmqModule),
+    forwardRef(() => MongodbModule),
     forwardRef(() => ChargesModule),
   ],
   controllers: [],

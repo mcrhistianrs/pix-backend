@@ -23,12 +23,16 @@ export class ChargePostgresDAO implements IChargeDAO {
   }
 
   async findById(id: string): Promise<Charge | null> {
-    const charge = await this.instanceTypeOrmOfCharge.findOne({
-      where: { id },
-    });
-    if (!charge) {
+    try {
+      const charge = await this.instanceTypeOrmOfCharge.findOne({
+        where: { id },
+      });
+      if (!charge) {
+        return null;
+      }
+      return ChargeMapper.toDomain(charge);
+    } catch {
       return null;
     }
-    return ChargeMapper.toDomain(charge);
   }
 }
