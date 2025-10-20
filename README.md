@@ -157,6 +157,12 @@ Acesse `http://localhost:3000/api` para explorar e testar os endpoints pelo Swag
 
 ---
 
+## Testes
+
+[![testes.png](https://i.postimg.cc/yxbC7PFb/testes.png)](https://postimg.cc/0KDBf7XY)
+
+---
+
 ## Scripts úteis
 
 ```bash
