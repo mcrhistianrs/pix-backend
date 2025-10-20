@@ -1,98 +1,188 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Pix Backend — API de Cobranças e Simulação de Pagamentos
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este projeto é um backend em NestJS que expõe endpoints para criar cobranças Pix, consultar cobranças por ID e simular pagamentos usando mensageria. Ele integra Postgres (persistência), Redis (cache), MongoDB (armazenamento adicional), RabbitMQ (fila para simulação) e Swagger (documentação interativa).
 
-## Description
+### Tecnologias
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Runtime**: Node.js + TypeScript
+- **Framework**: NestJS
+- **Banco relacional**: PostgreSQL via TypeORM
+- **Cache**: Redis via `@nestjs/cache-manager`
+- **Banco NoSQL**: MongoDB via Mongoose
+- **Mensageria**: RabbitMQ (`amqplib`)
+- **Documentação**: Swagger (`/api`)
+- **Container/Orquestração**: Docker + Docker Compose
+- **Qualidade**: ESLint, Prettier e Jest
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## Como iniciar o projeto
 
-## Compile and run the project
+Você pode rodar com Docker (recomendado) ou localmente.
+
+### 1) Usando Docker Compose (recomendado)
+
+1. Crie um arquivo `.env` na raiz do projeto com as variáveis mínimas:
 
 ```bash
-# development
-$ npm run start
+PORT=3000
 
-# watch mode
-$ npm run start:dev
+# Postgres
+POSTGRES_HOST=database
+POSTGRES_PORT=5432
+POSTGRES_USERNAME=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DATABASE=postgres
 
-# production mode
-$ npm run start:prod
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+# MongoDB
+MONGODB_HOST=mongodb
+MONGODB_PORT=27017
+MONGODB_USERNAME=admin
+MONGODB_PASSWORD=password
+MONGODB_DATABASE=admin
+
+# RabbitMQ (o docker-compose já define usuário/senha padrão)
+RABBITMQ_HOST=rabbitmq
+RABBITMQ_PORT=5672
+RABBITMQ_USER=guest
+RABBITMQ_PASS=guest
 ```
 
-## Run tests
+2. Suba os serviços:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose up -d --build
 ```
 
-## Deployment
+3. A API ficará disponível em `http://localhost:3000` e a documentação Swagger em `http://localhost:3000/api`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+4. Painéis/Portas úteis:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **RabbitMQ Management**: `http://localhost:15672` (user: `guest`, pass: `guest`)
+- **MongoDB**: porta `27017`
+- **Redis**: porta `6379`
+- **Postgres**: porta `5432`
+
+### 2) Rodando localmente (sem Docker)
+
+1. Garanta os serviços instalados e rodando localmente (Postgres, Redis, MongoDB, RabbitMQ) e configure um `.env` com seus hosts/ports locais.
+2. Instale dependências:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+3. Execute em modo desenvolvimento:
 
-## Resources
+```bash
+npm run start:dev
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+4. Acesse: `http://localhost:3000/api` para a documentação.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+## Endpoints principais
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `POST /charges` — Cria uma cobrança Pix
+- `GET /charges/:id` — Consulta uma cobrança por ID
+- `POST /charges/simulate-payment` — Simula um pagamento (processado via RabbitMQ)
 
-## Stay in touch
+Exemplos rápidos (curl):
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Criar cobrança
+curl -X POST http://localhost:3000/charges \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Assinatura Premium",
+    "amount": 129.90
+  }'
 
-## License
+# Buscar por ID
+curl http://localhost:3000/charges/<ID_DA_COBRANCA>
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Simular pagamento
+curl -X POST http://localhost:3000/charges/simulate-payment \
+  -H "Content-Type: application/json" \
+  -d '{
+    "chargeId": "<ID_DA_COBRANCA>",
+    "method": "PIX"
+  }'
+```
+
+---
+
+## Documentação (Swagger)
+
+Acesse `http://localhost:3000/api` para explorar e testar os endpoints pelo Swagger UI.
+
+[![swagger.png](https://i.postimg.cc/261qzHWw/swagger.png)](https://postimg.cc/TLX20JCL)
+
+---
+
+## Telas e evidências
+
+### Criar pagamento
+
+[![criar-pagamento.png](https://i.postimg.cc/VNsHvtDY/criar-pagamento.png)](https://postimg.cc/yD5TrkM5)
+
+### Listar/consultar pagamento
+
+[![listar-pagamento.png](https://i.postimg.cc/02BNcGKW/listar-pagamento.png)](https://postimg.cc/N5RY0H4m)
+
+### Simular pagamento
+
+[![simular-pagamento.png](https://i.postimg.cc/rszkrbjV/simular-pagamento.png)](https://postimg.cc/Fkt8tTw8)
+
+### Dados no Redis
+
+[![redis.png](https://i.postimg.cc/CLkFsyYk/redis.png)](https://postimg.cc/GH3wb54m)
+
+### Dados no MongoDB
+
+[![mongo.png](https://i.postimg.cc/c4XFjCsZ/mongo.png)](https://postimg.cc/GHTPTc8S)
+
+### Painel do RabbitMQ
+
+[![rabbitmq.png](https://i.postimg.cc/NMdyt3LM/rabbitmq.png)](https://postimg.cc/S2zQ7t6F)
+
+---
+
+## Scripts úteis
+
+```bash
+# desenvolvimento
+npm run start
+
+# watch mode (recomendado para dev)
+npm run start:dev
+
+# produção (após build)
+npm run build && npm run start:prod
+
+# testes
+npm run test
+npm run test:e2e
+npm run test:cov
+
+# lint/format
+npm run lint
+npm run format
+```
+
+---
+
+## Observações
+
+- O TypeORM está configurado com `synchronize: true` para facilitar o desenvolvimento. Em produção, ajuste conforme sua estratégia de migrações.
+- As integrações (Redis/Mongo/RabbitMQ) são inicializadas via variáveis de ambiente. Verifique o `.env`.
+- O Swagger é exposto em `/api` logo ao iniciar a aplicação.
